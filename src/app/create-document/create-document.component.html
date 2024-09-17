@@ -1,0 +1,17 @@
+<form (ngSubmit)="createDocument()" [formGroup]="documentForm">
+  <div>
+    <label for="title">Title:</label>
+    <input id="title" type="text" formControlName="title" required />
+  </div>
+  <div>
+    <label for="content">Content:</label>
+    <textarea id="content" formControlName="content" required></textarea>
+  </div>
+  <button type="submit" [disabled]="loading || documentForm.invalid">Create Document</button>
+</form>
+
+<p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+<div *ngIf="loading" class="loading-indicator">
+  Creating document, please wait...
+</div>

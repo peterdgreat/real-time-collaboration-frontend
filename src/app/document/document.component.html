@@ -1,1 +1,20 @@
-<p>document works!</p>
+<div>
+    <h1>Your Documents</h1>
+    <button (click)="createDocument()" class="create-document-button">Create New Document</button>
+    
+    <div *ngIf="loading" class="loading-indicator">
+      Loading documents, please wait...
+    </div>
+  
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  
+    <ul *ngIf="!loading && documents.length">
+      <li *ngFor="let document of documents" (click)="viewDocument(document.id)" class="document-item">
+        {{ document.title }}
+      </li>
+    </ul>
+  
+    <div *ngIf="!loading && !documents.length">
+      No documents found.
+    </div>
+  </div>

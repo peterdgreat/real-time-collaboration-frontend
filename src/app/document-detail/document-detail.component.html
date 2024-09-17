@@ -1,0 +1,8 @@
+<div>
+  <h1 *ngIf="document"> <input [(ngModel)]="document.title" (ngModelChange)="onTitleChange()" placeholder="Document Title" /></h1>
+  <div *ngIf="loading">Loading document, please wait...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <div *ngIf="document && !loading">
+    <textarea [(ngModel)]="document.content" (ngModelChange)="onContentChange()" rows="10" cols="50"></textarea>
+  </div>
+</div>

@@ -1,1 +1,20 @@
-<p>register works!</p>
+<form (ngSubmit)="register()" #registerForm="ngForm">
+    <div>
+      <label for="email">Email:</label>
+      <input id="email" type="email" [(ngModel)]="user.email" name="email" required />
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input id="password" type="password" [(ngModel)]="user.password" name="password" required />
+    </div>
+    <div>
+      <label for="password_confirmation">Confirm Password:</label>
+      <input id="password_confirmation" type="password" [(ngModel)]="user.password_confirmation" name="password_confirmation" required />
+    </div>
+    <button type="submit">Register</button>
+  </form>
+  
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  <div *ngIf="loading" class="loading-indicator">
+    Loading, please wait...
+  </div>
