@@ -56,4 +56,10 @@ export class ApiService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.put(`${this.apiUrl}/api/v1/documents/${documentId}`, { document }, { headers });
   }
+
+  //share document
+  shareDocument(token: string, documentId: string, email: string): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.apiUrl}/api/v1/documents/${documentId}/share`, { email }, { headers });
+  }
 }

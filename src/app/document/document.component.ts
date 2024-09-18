@@ -12,9 +12,20 @@ import { Router } from '@angular/router'; // Import Router
   imports: [CommonModule, HttpClientModule]
 })
 export class DocumentComponent {
-  documents: any[] = [];
-  errorMessage: string | null = null;
+  documents: any[] = []; // Array to hold all documents
   loading: boolean = false;
+  errorMessage: string = '';
+  selectedTab: string = 'owned'; // Default selected tab
+
+  // Method to select the tab
+  selectTab(tab: string) {
+    this.selectedTab = tab;
+  }
+
+  // Get filtered documents based on the selected tab
+  get filteredDocuments() {
+    return this.documents.filter(doc => (this.selectedTab === 'owned' ? doc.is_owned : !doc.is_owned));
+  }
 
   constructor(private apiService: ApiService, private router: Router) {}
 
@@ -29,7 +40,10 @@ export class DocumentComponent {
     ).subscribe({
       next: response => {
         console.log(response);
-        this.documents = response; // Assuming response is an array of documents
+      
+        this.documents = response; 
+        console.log(this.documents);
+        // Assuming response is an array of documents
         this.loading = false;
       },
       error: error => {

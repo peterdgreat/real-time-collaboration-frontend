@@ -7,14 +7,21 @@
     </div>
   
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-  
-    <ul *ngIf="!loading && documents.length">
-      <li *ngFor="let document of documents" (click)="viewDocument(document.id)" class="document-item">
+
+    <!-- Tabs for Owned and Shared Documents -->
+    <div class="tabs">
+      <button (click)="selectTab('owned')" [class.active]="selectedTab === 'owned'">Owned Documents</button>
+      <button (click)="selectTab('shared')" [class.active]="selectedTab === 'shared'">Shared Documents</button>
+    </div>
+
+    <!-- Document List -->
+    <ul *ngIf="!loading && filteredDocuments.length">
+      <li *ngFor="let document of filteredDocuments" (click)="viewDocument(document.id)" class="document-item">
         {{ document.title }}
       </li>
     </ul>
   
-    <div *ngIf="!loading && !documents.length">
+    <div *ngIf="!loading && !filteredDocuments.length">
       No documents found.
     </div>
-  </div>
+</div>

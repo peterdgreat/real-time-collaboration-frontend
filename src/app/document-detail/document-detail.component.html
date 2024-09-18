@@ -1,8 +1,20 @@
 <div>
-  <h1 *ngIf="document"> <input [(ngModel)]="document.title" (ngModelChange)="onTitleChange()" placeholder="Document Title" /></h1>
+  <h1 *ngIf="document">{{ document.title }}</h1>
   <div *ngIf="loading">Loading document, please wait...</div>
   <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
   <div *ngIf="document && !loading">
+    <input [(ngModel)]="document.title" (ngModelChange)="onTitleChange()" placeholder="Document Title" />
     <textarea [(ngModel)]="document.content" (ngModelChange)="onContentChange()" rows="10" cols="50"></textarea>
+    <button (click)="openShareModal()">Share Document</button>
+  </div>
+
+  <!-- Share Document Modal -->
+  <div *ngIf="isShareModalOpen" class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="closeShareModal()">&times;</span>
+      <h2>Share Document</h2>
+      <input type="email" [(ngModel)]="shareEmail" placeholder="Enter email to share" />
+      <button (click)="onShareDocument()">Done</button>
+    </div>
   </div>
 </div>
