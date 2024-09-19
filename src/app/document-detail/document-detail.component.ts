@@ -17,6 +17,8 @@ export class DocumentDetailComponent implements OnInit {
   document: any;
   errorMessage: string | null = null;
   loading: boolean = false;
+  isShareModalOpen: boolean = false; // Track modal state
+  shareEmail: string = ''; // Email input for sharing
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private cableService: CableService) {}
 
@@ -85,5 +87,40 @@ export class DocumentDetailComponent implements OnInit {
         }
       );
     }
+  }
+
+  onShareDocument() {
+    if (this.document) {
+      const token = localStorage.getItem('token') || '';
+      console.log('dco sharing', this.shareEmail);
+
+      this.apiService.shareDocument(token, this.document.id, this.shareEmail).subscribe(
+        (response) => {
+          console.log('Document shared successfully:', response);
+          this.closeShareModal();
+        },
+        (error) => {
+          this.handleError(error);
+        }
+      );
+    }
+  }
+
+  // Method to open the share modal
+  openShareModal() {
+    this.isShareModalOpen = true;
+  }
+
+  // Method to close the share modal
+  closeShareModal() {
+    this.isShareModalOpen = false;
+    this.shareEmail = ''; // Reset email input
+  }
+
+  // Method to share the document
+  shareDocument() {
+    // Implement your share logic here, e.g., API call
+    console.log(`Sharing document with ${this.shareEmail}`);
+    this.closeShareModal(); // Close modal after sharing
   }
 }
