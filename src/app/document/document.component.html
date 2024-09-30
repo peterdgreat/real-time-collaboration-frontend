@@ -1,27 +1,128 @@
-<div>
-    <h1>Your Documents</h1>
-    <button (click)="createDocument()" class="create-document-button">Create New Document</button>
-    
-    <div *ngIf="loading" class="loading-indicator">
-      Loading documents, please wait...
-    </div>
-  
-    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+<div class="">
+  <!-- Sidebar Component -->
+  <app-sidebar
+    (typeSelected)="onTypeSelected($event)"
+    (documentSelected)="viewDocument($event)"
+    [allDocuments]="documents"
+    [sharedDocuments]="sharedDocuments"
+    [ownedDocuments]="ownedDocuments"
+  >
+  </app-sidebar>
 
-    <!-- Tabs for Owned and Shared Documents -->
-    <div class="tabs">
-      <button (click)="selectTab('owned')" [class.active]="selectedTab === 'owned'">Owned Documents</button>
-      <button (click)="selectTab('shared')" [class.active]="selectedTab === 'shared'">Shared Documents</button>
+  <div *ngIf="selectedDocument" class="document-header">
+    <!-- Contributor Avatars -->
+    <div class="contributors">
+      <span class="contributor" *ngFor="let contributor of contributors">{{
+        getInitials(contributor.name)
+      }}</span>
+      <i (click)="toggleEdit()" class="fas fa-edit edit-icon"></i>
+      <i (click)="openShareModal()" class="fas fa-share-alt share-icon"></i>
+      <i (click)="deleteDocument()" class="fas fa-trash delete-icon"></i>
+
+      <!-- Share Modal -->
+      <div *ngIf="isShareModalOpen" class="modal">
+        <div class="modal-content">
+          <span class="close" (click)="closeShareModal()">&times;</span>
+          <h2>Share Document</h2>
+
+          <!-- Email Input with Validation -->
+          <input
+            type="email"
+            [(ngModel)]="shareEmail"
+            placeholder="Enter email to share"
+            required
+            #emailInput="ngModel"
+            (ngModelChange)="validateEmail()"
+            class="email-input"
+          />
+
+          <!-- Error Message for Invalid Email -->
+          <div *ngIf="!isEmailValid && shareEmail" class="error-message">
+            Please enter a valid email address.
+          </div>
+
+          <button (click)="onShareDocument()">Done</button>
+        </div>
+      </div>
+      <div *ngIf="isShareSuccess" class="success-message">
+        Document successfully shared with {{ shareEmail }}!
+      </div>
+      <div *ngIf="isShareError" class="error-message">
+        Failed to share document. {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Document Display Area -->
+  <div class="document-display">
+    <div *ngIf="selectedType === 'all'" class="document-info all-documents">
+      <i class="fas fa-file-alt icon-all"></i>
+      <h2>All Documents</h2>
+      <p>
+        Here you can view all the documents available. This includes shared,
+        owned, and any other documents accessible to you.
+      </p>
     </div>
 
-    <!-- Document List -->
-    <ul *ngIf="!loading && filteredDocuments.length">
-      <li *ngFor="let document of filteredDocuments" (click)="viewDocument(document.id)" class="document-item">
-        {{ document.title }}
-      </li>
-    </ul>
-  
-    <div *ngIf="!loading && !filteredDocuments.length">
-      No documents found.
+    <div *ngIf="selectedType === 'owned'" class="document-info owned-documents">
+      <i class="fas fa-folder icon-owned"></i>
+      <h2>Owned Documents</h2>
+      <p>
+        These are the documents you own. You can edit, delete, and manage them.
+      </p>
     </div>
+
+    <div
+      *ngIf="selectedType === 'shared'"
+      class="document-info shared-documents"
+    >
+      <i class="fas fa-share-alt icon-shared"></i>
+      <h2>Shared Documents</h2>
+      <p>
+        These are documents shared with you by others. You can view and
+        collaborate on these files.
+      </p>
+    </div>
+  </div>
+
+  <div class="document-wrapper" *ngIf="selectedDocument">
+    <!-- Document Header and Content (as before) -->
+    <div class="document-header">
+      <ng-template [ngIf]="!isEditing" #readOnlyContent>
+        <!-- Document Title and Metadata -->
+        <div class="document-title-section">
+          <h1>{{ selectedDocument?.title }}</h1>
+          <p class="document-timestamps">
+            Created {{ createdAgo }} ago · Last modified {{ updatedAgo }} ago
+          </p>
+        </div>
+      </ng-template>
+
+      <ng-template [ngIf]="isEditing" #editContent>
+        <!-- Editable Document Title -->
+        <input
+          [(ngModel)]="selectedDocument.title"
+          class="document-title"
+          placeholder="Enter document title"
+        />
+      </ng-template>
+    </div>
+
+    <!-- Document Content Area -->
+    <div class="document-content">
+      <div *ngIf="isEditing; else readOnlyContentForBody">
+        <!-- Editable Content -->
+        <textarea
+          [(ngModel)]="selectedDocument.content"
+          class="document-textarea"
+          placeholder="Enter document content"
+        ></textarea>
+      </div>
+
+      <!-- Read-Only Content -->
+      <ng-template #readOnlyContentForBody>
+        <p class="document-body">{{ selectedDocument?.content }}</p>
+      </ng-template>
+    </div>
+  </div>
 </div>
