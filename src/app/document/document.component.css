@@ -1,0 +1,452 @@
+/* Document wrapper settings */
+.document-wrapper {
+    margin-left: 320px; /* Leave space for the sidebar */
+    padding: 20px;
+    background-color: #f7f9fc;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+/* Document Header Section */
+.document-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Title Styling */
+.document-title-section h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Timestamps Styling */
+.document-timestamps {
+    font-size: 16px;
+    color: #888;
+    margin: 0;
+}
+
+/* Tag Styling */
+.document-tags {
+    display: flex;
+    gap: 10px;
+}
+
+/* Each tag's base style */
+.tag {
+    padding: 5px 15px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+}
+
+/* Tag Colors */
+.tag-green {
+    background-color: #c8f7c5;
+    color: #2d7a2b;
+}
+
+.tag-blue {
+    background-color: #d6eaff;
+    color: #316ab7;
+}
+
+.tag-purple {
+    background-color: #e5dbff;
+    color: #6b4cc3;
+}
+
+/* Document Actions Styling */
+.document-actions {
+    margin-bottom: 20px;
+}
+
+.btn-edit {
+    background-color: #0288d1;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.btn-edit:hover {
+    background-color: #0277bd;
+}
+
+.btn-edit i {
+    margin-right: 8px;
+}
+
+/* Document content area */
+.document-content {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Document title styles */
+.document-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border: none;
+    padding: 10px;
+    background-color: #f4f4f4;
+    width: 100%;
+    border-radius: 4px;
+    color: #333;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Read-only document body */
+.document-body {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Editable content area */
+.document-textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f4f4f4;
+    resize: vertical;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.document-display {
+    padding: 20px;
+    margin-left: 320px; /* Leave space for sidebar */
+    min-height: 200px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.document-display .document-info {
+    padding: 20px;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.document-info h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #333;
+}
+
+.document-info p {
+    font-size: 16px;
+    color: #777;
+    margin: 0 0 20px;
+}
+
+/* Icons for each document type */
+.icon-all {
+    font-size: 50px;
+    color: #4caf50;
+}
+
+.icon-owned {
+    font-size: 50px;
+    color: #2196f3;
+}
+
+.icon-shared {
+    font-size: 50px;
+    color: #ff9800;
+}
+
+/* All Documents Info */
+.all-documents {
+    background-color: #e8f5e9;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Owned Documents Info */
+.owned-documents {
+    background-color: #e3f2fd;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Shared Documents Info */
+.shared-documents {
+    background-color: #fff3e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Other CSS from previous sections */
+.document-wrapper {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.document-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.document-content {
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+/* Contributors section at the top */
+.contributors {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    justify-content: right;
+}
+
+.contributor {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.contributor:nth-child(1) {
+    background-color: #ffc107; /* Orange */
+    color: white;
+}
+
+.contributor:nth-child(2) {
+    background-color: #2196f3; /* Blue */
+    color: white;
+}
+
+.contributor:nth-child(3) {
+    background-color: #9c27b0; /* Purple */
+    color: white;
+}
+
+.contributor:nth-child(4) {
+    background-color: #8bc34a; /* Green */
+    color: white;
+}
+
+.more-icon {
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+}
+
+/* Dropdown for more actions */
+.more-container {
+    position: relative;
+}
+
+.more-actions-dropdown {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    z-index: 100;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.more-actions-dropdown ul {
+    list-style-type: none;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.more-actions-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.more-actions-dropdown li:hover {
+    background-color: #f2f2f2;
+}
+
+.more-actions-dropdown li i {
+    color: #666;
+}
+
+/* Action icons for share, edit, delete */
+.action-icons {
+    display: flex;
+    gap: 15px;
+    margin-left: 20px;
+    margin-top: -10px;
+}
+
+.action-icons i {
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+}
+
+.action-icons .share-icon:hover {
+    color: #2196f3;
+}
+
+.action-icons .edit-icon:hover {
+    color: #4caf50;
+}
+
+.action-icons .delete-icon:hover {
+    color: #f44336;
+}/* Modal styles */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #aaa;
+}
+
+.close:hover {
+    color: black; /* Change color on hover */
+}
+
+/* Button styles */
+button {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #1976d2; /* Darker blue on hover */
+}
+
+.success-message {
+    background-color: #4caf50; /* Green background for success */
+    color: white;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    animation: fadeOut 2s 3s forwards;
+    font-size: 16px;
+}
+.success-message, .error-message {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .success-message {
+    background-color: #4caf50; /* Green background for success */
+    color: white;
+    animation: fadeOut 2s 3s forwards;
+  }
+  
+  .error-message {
+    background-color: #f44336; /* Red background for error */
+    color: white;
+  }
+
+  
+  .email-input.ng-invalid.ng-touched {
+    border-color: #f44336; /* Red border for invalid input */
+  }
+  
+  
+/* Fade out animation for the message */
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

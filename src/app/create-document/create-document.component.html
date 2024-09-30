@@ -1,17 +1,25 @@
-<form (ngSubmit)="createDocument()" [formGroup]="documentForm">
-  <div>
+<form [formGroup]="documentForm" class="document-form">
+  <div class="form-group">
     <label for="title">Title:</label>
-    <input id="title" type="text" formControlName="title" required />
+    <div class="input-group">
+      <i class="fas fa-heading icon"></i>
+      <input id="title" type="text" formControlName="title" placeholder="Enter document title" required />
+    </div>
   </div>
-  <div>
+
+  <div class="form-group">
     <label for="content">Content:</label>
-    <textarea id="content" formControlName="content" required></textarea>
+    <div class="input-group">
+      <i class="fas fa-file-alt icon"></i>
+      <textarea id="content" formControlName="content" placeholder="Enter document content" required></textarea>
+    </div>
   </div>
-  <button type="submit" [disabled]="loading || documentForm.invalid">Create Document</button>
+
+  <!-- Error Message -->
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 </form>
 
-<p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-
+<!-- Loading Indicator -->
 <div *ngIf="loading" class="loading-indicator">
-  Creating document, please wait...
+  <p>Saving document...</p>
 </div>

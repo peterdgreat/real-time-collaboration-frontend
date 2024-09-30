@@ -34,9 +34,10 @@ export class ApiService {
   }
 
   // Get all documents
-  getDocuments(token: string): Observable<any> {
+  getDocuments(token: string, type?: string): Observable<any> {
+    console.log('Getting documents with type:', type);
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get(`${this.apiUrl}/api/v1/documents`, { headers });
+    return this.http.get(`${this.apiUrl}/api/v1/documents?type=${type}`, { headers });
   }
 
   // Create a comment

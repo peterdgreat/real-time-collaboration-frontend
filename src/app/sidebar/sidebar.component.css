@@ -1,0 +1,100 @@
+.sidebar {
+    width: 300px;
+    background-color: #f7f9fc; /* Light grey */
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    color: #333;
+}
+
+.sidebar h2 i {
+    margin-right: 10px;
+    color: #0288d1; /* Icon color for Docs */
+}
+
+.sidebar-list {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-list li {
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+}
+
+.sidebar-list li i {
+    margin-right: 10px;
+}
+
+.sidebar-list li:hover {
+    background-color: #e0f7fa; /* Light blue hover */
+}
+
+.sidebar-list li.active {
+    background-color: #b3e5fc; /* Active light blue */
+    font-weight: bold;
+}
+
+.sidebar ul ul {
+    padding-left: 20px;
+}
+
+.sidebar ul ul li i {
+    margin-right: 5px;
+}
+
+/* Color Schemes */
+.sidebar-list li i {
+    color: #333; /* Default icon color */
+}
+
+.sidebar-list li:hover i {
+    color: #0288d1; /* Hover color */
+}
+.btn-new-doc {
+    display: flex;
+    align-items: center;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-new-doc i {
+    margin-right: 5px;
+  }
+  
+  .btn-new-doc:hover {
+    background-color: #45a049;
+  }
+  
+  .d-header{
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-new-doc{
+    width: 100%;
+    height: 40px;
+}

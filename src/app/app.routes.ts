@@ -10,5 +10,5 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'documents', component: DocumentComponent },
   { path: 'document/:id', component: DocumentDetailComponent }, // Route for document detail
-  { path: 'create-document', component: CreateDocumentComponent }
+  { path: 'documents/create-document', component: CreateDocumentComponent }
 ];

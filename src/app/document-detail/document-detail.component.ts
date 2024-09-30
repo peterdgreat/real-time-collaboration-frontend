@@ -14,11 +14,12 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, HttpClientModule, FormsModule]
 })
 export class DocumentDetailComponent implements OnInit {
-  document: any;
-  errorMessage: string | null = null;
+  document: any; // Your document model
   loading: boolean = false;
+  errorMessage: string = '';
   isShareModalOpen: boolean = false; // Track modal state
   shareEmail: string = ''; // Email input for sharing
+  isEditing: boolean = false; // Track editing state
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private cableService: CableService) {}
 
@@ -122,5 +123,16 @@ export class DocumentDetailComponent implements OnInit {
     // Implement your share logic here, e.g., API call
     console.log(`Sharing document with ${this.shareEmail}`);
     this.closeShareModal(); // Close modal after sharing
+  }
+
+  // Method to toggle editing mode
+  toggleEdit() {
+    this.isEditing = !this.isEditing;
+  }
+
+  // Method to save changes
+  saveChanges() {
+    // Implement your save logic here, e.g., API call to update the document
+    this.isEditing = false; // Exit editing mode after saving
   }
 }

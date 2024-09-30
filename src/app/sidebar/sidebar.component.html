@@ -1,0 +1,60 @@
+<div class="sidebar">
+  <header class="d-header">
+    <button class="btn-new-doc" (click)="addNewDocument()">
+        <i class="fas fa-plus">
+            New Doc
+        </i>
+      </button>
+    <h2><i class="fas fa-folder-open"></i> Docs</h2>
+  </header>
+
+  <ul class="sidebar-list">
+    <!-- All Documents Section -->
+    <li (click)="toggleCollapse('all')" [class.active]="selectedType === 'all'">
+      <i class="fas fa-file-alt" style="color: #4caf50"></i> All Documents
+    </li>
+    <ul *ngIf="isCollapsed['all']">
+      <li *ngIf="allDocuments.length === 0">No documents found.</li>
+      <li
+        *ngFor="let document of allDocuments"
+        (click)="selectDocument(document.id)"
+      >
+        <i class="fas fa-file" style="color: #4caf50"></i> {{ document.title }}
+      </li>
+    </ul>
+
+    <!-- Shared Documents Section -->
+    <li
+      (click)="toggleCollapse('shared')"
+      [class.active]="selectedType === 'shared'"
+    >
+      <i class="fas fa-share-alt" style="color: #ff9800"></i> Shared Documents
+    </li>
+    <ul *ngIf="isCollapsed['shared']">
+      <li *ngIf="sharedDocuments.length === 0">No documents found.</li>
+      <li
+        *ngFor="let document of sharedDocuments"
+        (click)="selectDocument(document.id)"
+      >
+        <i class="fas fa-file" style="color: #ff9800"></i> {{ document.title }}
+      </li>
+    </ul>
+
+    <!-- Owned Documents Section -->
+    <li
+      (click)="toggleCollapse('owned')"
+      [class.active]="selectedType === 'owned'"
+    >
+      <i class="fas fa-folder" style="color: #2196f3"></i> Owned Documents
+    </li>
+    <ul *ngIf="isCollapsed['owned']">
+      <li *ngIf="ownedDocuments.length === 0">No documents found.</li>
+      <li
+        *ngFor="let document of ownedDocuments"
+        (click)="selectDocument(document.id)"
+      >
+        <i class="fas fa-file" style="color: #2196f3"></i> {{ document.title }}
+      </li>
+    </ul>
+  </ul>
+</div>
