@@ -1,13 +1,34 @@
-<form (ngSubmit)="login()" [formGroup]="loginForm">
-    <div>
-      <label for="email">Email:</label>
-      <input id="email" type="email" formControlName="email" required />
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input id="password" type="password" formControlName="password" required />
-    </div>
-    <button type="submit" [disabled]="loginForm.invalid">Login</button>
-  </form>
+<div class="login-container">
+  <div class="info-section">
+    <h2>Easy To Collaborate <br /> And Create Documents</h2>
+    <p>Effortlessly manage, share, and collaborate on your documents.</p>
+  </div>
+
+  <div class="login-form-section">
+    <h2>Hello Again!</h2>
+
+
+    <form (ngSubmit)="login()" [formGroup]="loginForm" class="login-form">
+      <div class="form-group">
+        <label for="email" class="sr-only">Email:</label>
+        <input id="email" type="email" formControlName="email" required placeholder="Email" />
+      </div>
+      <div class="form-group">
+        <label for="password" class="sr-only">Password:</label>
+        <input id="password" type="password" formControlName="password" required placeholder="Password" />
+      </div>
+      <div class="remember-me">
+        <label><input type="checkbox" /> Remember Me</label>
+        <a href="#" class="recovery-link">Recovery Password</a>
+      </div>
+      
+      <button type="submit" [disabled]="loginForm.invalid" class="btn-submit">Login</button>
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+      <p class="signup-text" > 
+        Don't have an account yet? <a class="signup-link" (click)="navigateToSignup()">Sign Up</a>
+      </p>
+    </form>
+  </div>
+</div>
+
   
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>

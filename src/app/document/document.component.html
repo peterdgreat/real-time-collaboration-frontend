@@ -101,7 +101,8 @@
       <ng-template [ngIf]="isEditing" #editContent>
         <!-- Editable Document Title -->
         <input
-          [(ngModel)]="selectedDocument.title"
+          [(ngModel)]="selectedDocument.title" 
+          (ngModelChange)="updateDocument()" 
           class="document-title"
           placeholder="Enter document title"
         />
@@ -113,7 +114,8 @@
       <div *ngIf="isEditing; else readOnlyContentForBody">
         <!-- Editable Content -->
         <textarea
-          [(ngModel)]="selectedDocument.content"
+          [(ngModel)]="selectedDocument.content" 
+          (ngModelChange)="updateDocument()"
           class="document-textarea"
           placeholder="Enter document content"
         ></textarea>

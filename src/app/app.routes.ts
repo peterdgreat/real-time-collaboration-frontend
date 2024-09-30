@@ -6,6 +6,7 @@ import { CreateDocumentComponent } from './create-document/create-document.compo
 import { DocumentDetailComponent } from './document-detail/document-detail.component';
 
 export const routes: Routes = [
+  {path:'',redirectTo: '/login', pathMatch:'full'},
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'documents', component: DocumentComponent },

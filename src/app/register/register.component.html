@@ -1,20 +1,33 @@
-<form (ngSubmit)="register()" #registerForm="ngForm">
-    <div>
-      <label for="email">Email:</label>
-      <input id="email" type="email" [(ngModel)]="user.email" name="email" required />
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input id="password" type="password" [(ngModel)]="user.password" name="password" required />
-    </div>
-    <div>
-      <label for="password_confirmation">Confirm Password:</label>
-      <input id="password_confirmation" type="password" [(ngModel)]="user.password_confirmation" name="password_confirmation" required />
-    </div>
-    <button type="submit">Register</button>
-  </form>
-  
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-  <div *ngIf="loading" class="loading-indicator">
-    Loading, please wait...
+<div class="signup-container">
+  <div class="info-section">
+    <h2>Join Us Today!<br /> And Start Easy Collaboarting</h2>
+    <p>Sign up to effortlessly collaborate on your documents..</p>
   </div>
+
+  <div class="signup-form-section">
+    <h2>Create Your Account</h2>
+    <p>Fill in your details below to get started.</p>
+
+    <form (ngSubmit)="register()" #registerForm="ngForm" class="signup-form">
+      <div class="form-group">
+        <label for="email" class="sr-only">Email:</label>
+        <input id="email" type="email" [(ngModel)]="user.email" name="email" required placeholder="Email" />
+      </div>
+      <div class="form-group">
+        <label for="password" class="sr-only">Password:</label>
+        <input id="password" type="password" [(ngModel)]="user.password" name="password" required placeholder="Password" />
+      </div>
+      <div class="form-group">
+        <label for="password_confirmation" class="sr-only">Confirm Password:</label>
+        <input id="password_confirmation" type="password" [(ngModel)]="user.password_confirmation" name="password_confirmation" required placeholder="Confirm Password" />
+      </div>
+      <button type="submit" class="btn-submit">Register</button>
+      <p class="login-text">
+        Already have an account? <a href="#">Login</a>
+      </p>
+    </form>
+
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+    <div *ngIf="loading" class="loading-indicator">Loading, please wait...</div>
+  </div>
+</div>
