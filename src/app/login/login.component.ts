@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ApiService } from '../api.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -14,12 +15,14 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private apiService: ApiService) {
+  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
   }
+
+
 
   ngOnInit() {}
 
@@ -29,6 +32,7 @@ export class LoginComponent implements OnInit {
         next: response => {
           console.log('Login successful', response);
           localStorage.setItem('token', response.token);
+          this.router.navigate(['/documents']);
         },
         error: error => {
           this.handleError(error);
@@ -36,6 +40,11 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+
+  navigateToSignup() { // {{ edit_4 }}
+    this.router.navigate(['/register']); // Adjust the route as necessary
+}
+
   private handleError(error: any) {
     if (error.error && error.error.message) {
       this.errorMessage = error.error.message;
