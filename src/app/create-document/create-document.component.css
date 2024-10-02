@@ -85,14 +85,27 @@
     margin-top: 10px;
   }
   
-  .loading-indicator {
-    text-align: center;
-    padding: 20px;
-  }
-  
+/* Loading Indicator Styles */
+.loading-indicator {
+  position: fixed; /* Use fixed positioning */
+  top: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  color: white; /* Text color */
+  padding: 10px 20px; /* Padding */
+  border-radius: 5px; /* Rounded corners */
+  z-index: 1000; /* Ensure it appears above other content */
+  transition: opacity 0.3s ease; /* Smooth transition for appearance */
+}
+
+/* Optional: Add a fade-out effect */
+.loading-indicator.ng-hide {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
   .loading-indicator p {
     font-size: 16px;
-    color: #555;
+    /* color: #555; */
   }
   
   .spinner-border {
@@ -112,4 +125,85 @@
       transform: rotate(360deg);
     }
   }
-  
+/* General editor styles */
+.ngx-editor {
+    border: 1px solid red#e0e0e0; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 16px; /* Padding inside the editor */
+    background-color: #ffffff; /* White background */
+}
+
+/* Toolbar styles */
+.ngx-editor-menu {
+    background-color: #f7f7f7; /* Light background for the toolbar */
+    border-bottom: 1px solid #e0e0e0; /* Border below the toolbar */
+    padding: 8px; /* Padding for the toolbar */
+    border-radius: 8px 8px 0 0; /* Rounded corners on top */
+}
+
+/* Button styles */
+.ngx-editor-menu button {
+    background-color: #007bff !important; /* Primary button color */
+    color: #ffffff; /* White text */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px 12px; /* Padding for buttons */
+    margin-right: 8px; /* Space between buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.ngx-editor-menu button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Input styles */
+input[type="text"] {
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px; /* Padding inside the input */
+    width: 100%; /* Full width */
+    margin-bottom: 16px; /* Space below the input */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Error message styles */
+.error-message {
+    color: #d9534f; /* Red color for error messages */
+    margin-top: 8px; /* Space above the error message */
+}
+
+.doc-content{
+  background-color: #f7f9fc; /* Light grey */
+  padding: 20px;
+
+}
+
+.editor {
+  border-radius: 4px;
+  min-height: 80vh; 
+  margin: 68px;
+  margin-top: 58px;
+  background-color: #fff;
+  padding: 20px;
+ 
+}
+
+.back-btn {
+  background-color: #007bff; /* Primary button color */
+  color: white; /* White text */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 10px 15px; /* Padding for the button */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin-bottom: 20px; /* Space below the button */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.back-btn:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+
+
