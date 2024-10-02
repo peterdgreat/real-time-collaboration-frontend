@@ -1,25 +1,22 @@
-<form [formGroup]="documentForm" class="document-form">
-  <div class="form-group">
-    <label for="title">Title:</label>
-    <div class="input-group">
-      <i class="fas fa-heading icon"></i>
-      <input id="title" type="text" formControlName="title" placeholder="Enter document title" required />
+<div class="doc-content">
+    <button (click)="goBack()" class="back-btn">Back</button> <!-- Back Button -->
+    
+    <div class="editor" *ngIf="editor">
+        <!-- Only render if editor is initialized -->
+        <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+        <ngx-editor
+            [editor]="editor"
+            [(ngModel)]="html"
+            (ngModelChange)="onContentChange($event)"
+            [placeholder]="'Type here...'"
+        ></ngx-editor>
     </div>
-  </div>
 
-  <div class="form-group">
-    <label for="content">Content:</label>
-    <div class="input-group">
-      <i class="fas fa-file-alt icon"></i>
-      <textarea id="content" formControlName="content" placeholder="Enter document content" required></textarea>
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="loading-indicator">
+        <p>Saving document...</p>
     </div>
-  </div>
 
-  <!-- Error Message -->
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-</form>
-
-<!-- Loading Indicator -->
-<div *ngIf="loading" class="loading-indicator">
-  <p>Saving document...</p>
+    <!-- Error Message -->
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 </div>

@@ -1,98 +1,97 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { CableService } from '../cable.service';
-import { QuillModule } from 'ngx-quill';
 import { debounceTime } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; // Import Router
+
+// Utility function to strip HTML tags
+function stripHtmlTags(input: string): string {
+  const div = document.createElement('div');
+  div.innerHTML = input;
+  return div.textContent || div.innerText || ''; // Ensure it returns plain text
+}
 
 @Component({
   selector: 'app-create-document',
   standalone: true,
   templateUrl: './create-document.component.html',
   styleUrls: ['./create-document.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, QuillModule]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    FormsModule,
+    NgxEditorModule,
+  ],
 })
-export class CreateDocumentComponent {
-  documentForm: FormGroup;
+export class CreateDocumentComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   loading: boolean = false;
-  modules = {
-    toolbar: [
-      [{ 'font': [] }],
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],  // toggled buttons
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],  // outdent/indent
-      [{ 'direction': 'rtl' }],  // text direction
-      [{ 'align': [] }],
-      ['link', 'image'],
-      ['clean']  // remove formatting button
-    ]
-  };
-  
-  
-  constructor(private apiService: ApiService, private fb: FormBuilder, private router: Router, private cableService: CableService) {
-    this.documentForm = this.fb.group({
-      title: ['', Validators.required],
-      content: ['', Validators.required],
-    });
+  editor!: Editor; // Use non-null assertion
+  html = ''; // This will hold the editor content
+  documentTitle: string = ''; // This will hold the document title
+  toolbar: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
+  constructor(
+    private apiService: ApiService,
+    private cableService: CableService,
+    private router: Router
+  ) {}
 
-    // Auto-save content whenever the form changes
-    this.documentForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
-      this.autoSave();
-    });
-
-  }
-
-  // createDocument() {
-  //   if (this.documentForm.valid) {
-  //     this.loading = true;
-  //     this.apiService.createDocument(localStorage.getItem('token') || '', this.documentForm.value).subscribe({
-  //       next: response => {
-  //         console.log('Document created successfully', response);
-  //         this.loading = false;
-  //         this.router.navigate(['/documents']); // Redirect to documents list
-  //       },
-  //       error: error => {
-  //         this.loading = false;
-  //         this.handleError(error);
-  //       }
-  //     });
-  //   }
-  // }
-  createDocument() {
-    if (this.documentForm.valid) {
-      this.loading = true;
-      this.apiService.createDocument(localStorage.getItem('token') || '', this.documentForm.value).subscribe({
-        next: response => {
-          console.log('Document created successfully', response);
-          this.loading = false;
-          // Emit the new document creation event
-          this.cableService.documentUpdates.next(response); // Emit new document to subscribers
-          //this.router.navigate(['/documents']); // Redirect to documents list
-        },
-        error: error => {
-          this.loading = false;
-          this.handleError(error);
-        }
-      });
+  ngOnInit(): void {
+    if (typeof document !== 'undefined') {
+      // Check if in browser environment
+      this.editor = new Editor();
     }
   }
-  
-  autoSave() {
-    if (this.documentForm.valid) {
-      const token = localStorage.getItem('token') || '';
-      const documentData = this.documentForm.value;
-      this.loading = true;
 
-      this.apiService.createDocument(token, documentData).subscribe({
+  ngOnDestroy(): void {
+    if (this.editor) {
+      this.editor.destroy();
+    }
+  }
+
+  // Method to handle content changes from the editor
+  onContentChange(content: string) {
+    this.html = content; // Update html with editor content
+    this.updateTitle();
+
+    this.autoSave(); // Call autoSave whenever content changes
+  }
+
+  updateTitle() {
+    const firstLine = this.html.split('\n')[0]; // Get the first line
+    this.documentTitle = firstLine.trim(); // Set the title, trimming any whitespace
+  }
+  createDocument() {
+    this.loading = true;
+    const token = localStorage.getItem('token') || '';
+    const sanitizedContent = stripHtmlTags(this.html); // Strip HTML tags
+
+    console.log('Sanitized Content:', sanitizedContent); // Log sanitized content
+
+    // Ensure the content is sent as part of a document object
+    this.apiService
+      .createDocument(token, {
+        title: this.documentTitle,
+        content: sanitizedContent,
+      })
+      .subscribe({
         next: (response) => {
-          console.log('Document saved successfully', response);
+          console.log('Document created successfully', response);
           this.loading = false;
-          // Emit real-time updates through WebSocket
           this.cableService.documentUpdates.next(response);
         },
         error: (error) => {
@@ -100,15 +99,50 @@ export class CreateDocumentComponent {
           this.handleError(error);
         },
       });
+  }
+
+  autoSave() {
+    const token = localStorage.getItem('token') || '';
+    this.loading = true;
+    const sanitizedContent = stripHtmlTags(this.html); // Strip HTML tags
+
+    if (sanitizedContent.trim()) {
+      console.log('Sanitized Content:', sanitizedContent); // Log sanitized content
+      setTimeout(() => {
+        this.apiService
+          .createDocument(token, {
+            title: this.documentTitle,
+            content: sanitizedContent,
+          })
+          .subscribe({
+            next: (response) => {
+              console.log('Document saved successfully', response);
+              this.loading = false;
+              this.cableService.documentUpdates.next(response);
+            },
+            error: (error) => {
+              setTimeout(() => {
+                this.loading = false; // Hide loading indicator after a delay
+              }, 60000); // Adjust the duration as needed (e.g., 2000 ms = 2 seconds)
+
+              this.handleError(error);
+            },
+          });
+      }, 1000);
     }
   }
 
-
   private handleError(error: any) {
+    console.error('API Error:', error);
     if (error.error && error.error.message) {
       this.errorMessage = error.error.message;
     } else {
-      this.errorMessage = 'An unexpected error occurred while creating the document. Please try again later.';
+      this.errorMessage =
+        'An unexpected error occurred while creating the document. Please try again later.';
     }
+  }
+
+  goBack() {
+    this.router.navigate(['/documents']); // Navigate to the previous route
   }
 }
