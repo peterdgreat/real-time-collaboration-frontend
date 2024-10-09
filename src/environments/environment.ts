@@ -1,5 +1,5 @@
 // src/environments/environment.ts
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000', // Use your local API URL for development
+  production: true,
+  apiUrl: 'https://real-time-collab-api.onrender.com'// Use your local API URL for development
 };
