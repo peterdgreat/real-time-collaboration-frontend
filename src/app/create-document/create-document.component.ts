@@ -44,6 +44,7 @@ export class CreateDocumentComponent implements OnInit, OnDestroy {
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+  private autoSaveTimeout: any; 
   constructor(
     private apiService: ApiService,
     private cableService: CableService,
@@ -72,8 +73,16 @@ export class CreateDocumentComponent implements OnInit, OnDestroy {
   }
 
   updateTitle() {
-    const firstLine = this.html.split('\n')[0]; // Get the first line
-    this.documentTitle = firstLine.trim(); // Set the title, trimming any whitespace
+    // Create a temporary DOM element to parse the HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = this.html; // Set the HTML content
+
+    // Get the first <p> tag
+    const firstParagraph = tempDiv.querySelector('p');
+    // Set the title to the text content of the first <p> tag, or default to 'Untitled Document'
+    this.documentTitle = firstParagraph ? firstParagraph.textContent?.trim() || 'Untitled Document' : 'Untitled Document';
+
+    console.log("setting doc title", this.documentTitle);
   }
   createDocument() {
     this.loading = true;
@@ -81,7 +90,7 @@ export class CreateDocumentComponent implements OnInit, OnDestroy {
     const sanitizedContent = stripHtmlTags(this.html); // Strip HTML tags
 
     console.log('Sanitized Content:', sanitizedContent); // Log sanitized content
-
+    console.log('Sanitized title:', this.documentTitle); 
     // Ensure the content is sent as part of a document object
     this.apiService
       .createDocument(token, {
@@ -108,7 +117,9 @@ export class CreateDocumentComponent implements OnInit, OnDestroy {
 
     if (sanitizedContent.trim()) {
       console.log('Sanitized Content:', sanitizedContent); // Log sanitized content
-      setTimeout(() => {
+      console.log('Sanitized title:', this.documentTitle); 
+      clearTimeout(this.autoSaveTimeout); // Clear any existing timeout
+      this.autoSaveTimeout = setTimeout(() => { // Set a new timeout
         this.apiService
           .createDocument(token, {
             title: this.documentTitle,
@@ -128,7 +139,7 @@ export class CreateDocumentComponent implements OnInit, OnDestroy {
               this.handleError(error);
             },
           });
-      }, 1000);
+      }, 2000); // Adjust the duration as needed (e.g., 2000 ms = 2 seconds)
     }
   }
 

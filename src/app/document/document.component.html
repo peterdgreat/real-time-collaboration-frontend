@@ -91,7 +91,7 @@
       <ng-template [ngIf]="!isEditing" #readOnlyContent>
         <!-- Document Title and Metadata -->
         <div class="document-title-section">
-          <h1>{{ selectedDocument?.title }}</h1>
+          <h1>{{ selectedDocument?.title }}</h1> <!-- Display the title -->
           <p class="document-timestamps">
             Created {{ createdAgo }} ago · Last modified {{ updatedAgo }} ago
           </p>
