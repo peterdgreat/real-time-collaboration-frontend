@@ -45,6 +45,8 @@ export class CreateDocumentComponent implements OnInit, OnDestroy {
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
   private autoSaveTimeout: any; 
+  private documentId: string | null = null; // Add a property to store the document ID
+
   constructor(
     private apiService: ApiService,
     private cableService: CableService,
@@ -120,25 +122,44 @@ export class CreateDocumentComponent implements OnInit, OnDestroy {
       console.log('Sanitized title:', this.documentTitle); 
       clearTimeout(this.autoSaveTimeout); // Clear any existing timeout
       this.autoSaveTimeout = setTimeout(() => { // Set a new timeout
-        this.apiService
-          .createDocument(token, {
-            title: this.documentTitle,
-            content: sanitizedContent,
-          })
-          .subscribe({
-            next: (response) => {
-              console.log('Document saved successfully', response);
-              this.loading = false;
-              this.cableService.documentUpdates.next(response);
-            },
-            error: (error) => {
-              setTimeout(() => {
-                this.loading = false; // Hide loading indicator after a delay
-              }, 60000); // Adjust the duration as needed (e.g., 2000 ms = 2 seconds)
-
-              this.handleError(error);
-            },
-          });
+        if (this.documentId) {
+          // If documentId exists, update the document
+          this.apiService
+            .updateDocument(token, this.documentId, {
+              title: this.documentTitle,
+              content: sanitizedContent,
+            })
+            .subscribe({
+              next: (response) => {
+                console.log('Document updated successfully', response);
+                this.loading = false;
+                this.cableService.documentUpdates.next(response);
+              },
+              error: (error) => {
+                this.loading = false; // Hide loading indicator
+                this.handleError(error);
+              },
+            });
+        } else {
+          // If documentId does not exist, create a new document
+          this.apiService
+            .createDocument(token, {
+              title: this.documentTitle,
+              content: sanitizedContent,
+            })
+            .subscribe({
+              next: (response) => {
+                console.log('Document created successfully', response);
+                this.loading = false;
+                this.documentId = response.id; // Store the document ID for future updates
+                this.cableService.documentUpdates.next(response);
+              },
+              error: (error) => {
+                this.loading = false; // Hide loading indicator
+                this.handleError(error);
+              },
+            });
+        }
       }, 2000); // Adjust the duration as needed (e.g., 2000 ms = 2 seconds)
     }
   }
