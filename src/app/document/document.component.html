@@ -112,15 +112,13 @@
     <!-- Document Content Area -->
     <div class="document-content">
       <div *ngIf="isEditing; else readOnlyContentForBody">
-        <!-- Editable Content -->
-        <textarea
-          [(ngModel)]="selectedDocument.content" 
-          (ngModelChange)="updateDocument()"
+        <!-- Editable Content using ngx-editor -->
+        <ngx-editor
+          [(ngModel)]="html"
+          (ngModelChange)="onContentChange($event)"
           class="document-textarea"
-          placeholder="Enter document content"
-        ></textarea>
+        ></ngx-editor>
       </div>
-
       <!-- Read-Only Content -->
       <ng-template #readOnlyContentForBody>
         <p class="document-body">{{ selectedDocument?.content }}</p>

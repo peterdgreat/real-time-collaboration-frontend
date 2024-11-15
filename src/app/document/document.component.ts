@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import moment from 'moment';
 
 interface Document {
@@ -10,15 +11,20 @@ interface Document {
   // Add other properties as needed
 }
 
+function stripHtmlTags(input: string): string {
+  const div = document.createElement('div');
+  div.innerHTML = input;
+  return div.textContent || div.innerText || ''; // Ensure it returns plain text
+}
 @Component({
   selector: 'app-document',
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.css'],
   standalone: true,
-  imports: [SidebarComponent, CommonModule, FormsModule],
+  imports: [SidebarComponent, CommonModule, FormsModule,NgxEditorModule,ReactiveFormsModule],
   providers: [ApiService],
 })
-export class DocumentComponent {
+export class DocumentComponent implements OnInit, OnDestroy  {
   documents: any[] = []; // Array to hold all documents
   sharedDocuments: any[] = []; // Array to hold shared documents
   ownedDocuments: any[] = []; // Array to hold owned documents
@@ -36,6 +42,19 @@ export class DocumentComponent {
   isShareSuccess: boolean = false;
   isShareError: boolean = false;
   isEmailValid:boolean = true;
+  editor!: Editor; // Use non-null assertion
+  html = ''; // This will hold the editor content
+  documentTitle: string = ''; // This will hold the document title
+  toolbar: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
   
 
   contributors = [
@@ -45,7 +64,24 @@ export class DocumentComponent {
     { name: 'Tom Riddle' },
   ];
 
+  private autoSaveTimeout: any; 
+  private documentId: string | null = null; 
   constructor(private apiService: ApiService) {} // Inject ApiService
+
+  ngOnInit() {
+    this.loadDocuments('all'); // Load all documents by default
+    this.authToken = localStorage.getItem('token') || '';
+    if (typeof document !== 'undefined') {
+      // Check if in browser environment
+      this.editor = new Editor();
+    }
+  }
+
+  ngOnDestroy(): void {
+       if (this.editor) {
+      this.editor.destroy();
+    }
+  }
 
   private handleError(error: any) {
     if (error.error && error.error.message) {
@@ -56,10 +92,7 @@ export class DocumentComponent {
     }
   }
 
-  ngOnInit() {
-    this.loadDocuments('all'); // Load all documents by default
-    this.authToken = localStorage.getItem('token') || '';
-  }
+
 
   loadDocuments(type: 'all' | 'shared' | 'owned') {
     this.selectedType = type;
@@ -119,14 +152,19 @@ export class DocumentComponent {
 
   toggleEdit() {
     this.isEditing = !this.isEditing; // Toggle the editing state
-    if (!this.isEditing) {
-      this.updateDocument(); // Call updateDocument when exiting edit mode
+    if (this.isEditing) {
+        this.html = this.selectedDocument.content; // Set the editor content to the current document content
+    } else {
+        this.updateDocument(); // Call updateDocument when exiting edit mode
     }
     this.moreActionsVisible = false;
   }
 
   updateDocument() {
     if (this.selectedDocument) {
+      // Ensure the content from the ngx-editor is included in the update
+      this.selectedDocument.content = this.html; // Update the content from the editor
+
       this.apiService
         .updateDocument(
           this.authToken,
@@ -216,5 +254,26 @@ export class DocumentComponent {
   deleteDocument() {
     console.log('Document deleted!');
     this.moreActionsVisible = false; // Hide dropdown after action
+  }
+
+
+  updateTitle() {
+    // Create a temporary DOM element to parse the HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = this.html; // Set the HTML content
+
+    // Get the first <p> tag
+    const firstParagraph = tempDiv.querySelector('p');
+    // Set the title to the text content of the first <p> tag, or default to 'Untitled Document'
+    this.documentTitle = firstParagraph ? firstParagraph.textContent?.trim() || 'Untitled Document' : 'Untitled Document';
+
+    console.log("setting doc title", this.documentTitle);
+  }
+
+  onContentChange(content: string) {
+    this.html = content; // Update html with editor content
+    this.updateTitle();
+
+    this.updateDocument(); // Call autoSave whenever content changes
   }
 }
